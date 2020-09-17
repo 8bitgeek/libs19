@@ -22,8 +22,7 @@
 #include <srec.h>
 #include <string.h>
 
-#define nibble(h) (((h)>='A'&&(h)<='F') ? (((h)-'A')+10) : ((h)-'0'))
-
+static uint8_t  nibble         (uint8_t c);
 static uint8_t 	ascii_hex_translate(uint8_t length, char* input, srec_result_t* output);
 static uint8_t 	make_checksum  (uint8_t length, char* input);
 static uint8_t  fetch_checksum (uint8_t length, char* input);
@@ -47,10 +46,13 @@ srecord_t srec_parse(char* input, srec_result_t* output)
 		if ( strlen(input) >= 10 && *input++ == 'S' ) // could be an S record?
 		{
 			uint8_t srec_type = *input++;
-			uint8_t length = ascii_hex_8(input); input += 2;
-			
-			if ( make_checksum(length,input) == fetch_checksum(length,input) )
+			uint8_t length = ascii_hex_8(input); 
+			uint8_t calc_chk = make_checksum(length,input);
+			uint8_t actual_chk = fetch_checksum(length,input);
+			if ( calc_chk == actual_chk )
 			{
+				input += 2; // skip count
+			
 				switch(srec_type)
 				{
 					case '0':	
@@ -103,14 +105,32 @@ srecord_t srec_parse(char* input, srec_result_t* output)
  * Calculate the checksum.
  * @param length The length byte extracted from the S record.
  * @param input The ASCII input record starting after the length byte.
- * @return the 2's compliment checksum.
+ * @return the 1's compliment checksum.
  */
 static uint8_t make_checksum(uint8_t length, char* input)
 {
-	uint8_t rc=length;
-	for(int n=0; n < length; n++)
-		rc += input[n];
-	return ~rc;
+	uint8_t sum=0;
+	for(uint8_t n=0; n < length; n++)
+	{
+		sum+=ascii_hex_8(input);
+		input += 2;
+	}
+	return ~sum;
+}
+
+
+static uint8_t nibble(uint8_t c)
+{
+	if ( c >= 'A' && c <= 'F' )
+		c = (c-'A')+10;
+	else if ( c >= 'a' && c <= 'f' )
+		c = (c-'a')+10;
+	else if ( c >= '0' && c <= '9' )
+		c = (c-'0');
+	else
+		c = 0;
+
+	return c;
 }
 
 static uint8_t ascii_hex_8(char* input)
@@ -163,7 +183,7 @@ static uint8_t ascii_hex_translate(uint8_t length, char* input, srec_result_t* o
 		input++;
 		output->data[n]=ch;
 	}
-	return length;
+	return ( output->length = length );
 }
 
 /**
@@ -176,6 +196,6 @@ static uint8_t fetch_checksum(uint8_t length, char* input)
 {
 	char* pchecksum = &input[length*2];
 	uint8_t rc=ascii_hex_8(pchecksum);
-	return ~rc;
+	return rc;
 }
 

@@ -30,7 +30,8 @@ extern void srec_reader_init (  srec_reader_t*      reader,
                                 srec_callback_fn_t  store_fn, 
                                 srec_callback_fn_t  term_fn,
                                 char*               line_buffer, 
-                                int                 max_line_len )
+                                int                 max_line_len,
+                                void*               arg )
 {
     memset(reader,0,sizeof(srec_reader_t));
     reader->fil          = fil;
@@ -39,6 +40,7 @@ extern void srec_reader_init (  srec_reader_t*      reader,
     reader->term_fn      = term_fn;
     reader->line_buffer  = line_buffer;
     reader->max_line_len = max_line_len;
+    reader->arg          = arg;
 }
 
 extern void srec_reader( srec_reader_t* reader )

@@ -40,6 +40,7 @@ typedef struct _srec_reader_t_
     int (*term_fn)(struct _srec_reader_t_*);    /* termination / entry-point callabck */
     char*               line_buffer;
     int                 max_line_len;
+    void*               arg;                    /* consumer argument */
 } srec_reader_t;
 
 typedef int  (*srec_callback_fn_t)(srec_reader_t*);
@@ -52,7 +53,8 @@ extern void srec_reader_init (
                                 srec_callback_fn_t  store_fn, 
                                 srec_callback_fn_t  term_fn,
                                 char*               line_buffer, 
-                                int                 max_line_len 
+                                int                 max_line_len,
+                                void*               arg
                              );
 extern void srec_reader_read ( srec_reader_t* reader );
 

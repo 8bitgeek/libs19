@@ -43,7 +43,7 @@ extern void srec_reader_init (  srec_reader_t*      reader,
     reader->arg          = arg;
 }
 
-extern void srec_reader( srec_reader_t* reader )
+extern void srec_reader_read( srec_reader_t* reader )
 {
     while ( srec_readline( reader->fil, reader->line_buffer, reader->max_line_len ) > 0 )
     {

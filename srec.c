@@ -83,7 +83,7 @@ srecord_t srec_parse(char* input, srec_result_t* output)
 						output->record = S6;
 						break;
 					case '7':	
-						output->address = ascii_hex_16(input);
+						output->address = ascii_hex_32(input);
 						output->record = S7;
 						break;
 					case '8':	
@@ -91,7 +91,7 @@ srecord_t srec_parse(char* input, srec_result_t* output)
 						output->record = S8;
 						break;
 					case '9':	
-						output->address = ascii_hex_32(input);
+						output->address = ascii_hex_16(input);
 						output->record = S9;
 						break;
 				}

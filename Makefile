@@ -17,3 +17,6 @@ srec.o: \
 srecreader.o: \
 	srecreader.c srecreader.h 
 
+install: $(TARGET)
+	cp $(TARGET) /usr/local/lib/
+	cp srec.h srecreader.h /usr/local/include/

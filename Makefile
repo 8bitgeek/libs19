@@ -1,6 +1,7 @@
 TARGET=libs19.a
 
-CPPFLAGS+=-O2 -I./
+#CPPFLAGS+=-O2 -I./
+CPPFLAGS+=-ggdb -I./
 
 all:	$(TARGET)
 

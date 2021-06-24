@@ -1,0 +1,9 @@
+# ** S19
+# SRC_LIBS19=${ENV_LIBS19_ROOT}
+SRC_LIBMODBUS=${SRC_ROOT}/libs19
+
+INC += 	-I $(SRC_LIBS19)
+
+SRCS_CC += $(SRC_LIBS19)/srec.c
+SRCS_CC += $(SRC_LIBS19)/srecreader.c
+

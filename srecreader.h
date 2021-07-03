@@ -22,8 +22,19 @@
 #ifndef _SRECREADER_H_
 #define _SRECREADER_H_
 
-#include <stdint.h>
-#include <stdio.h>
+#if defined(__CARIBOU_RTOS__)
+    #include <board.h>
+    #include <caribou/lib/stdint.h>
+    #include <caribou/lib/stdio.h>
+    #define SREC_FILE FIL
+    #define srec_fgets f_gets
+#else 
+    #include <stdint.h>
+    #include <stdio.h>
+    #define SREC_FILE FILE
+    #define srec_fgets fgets
+#endif
+
 #include <srec.h>
 
 #ifdef __cplusplus
@@ -33,7 +44,7 @@ extern "C"
 
 typedef struct _srec_reader_t_
 {
-	FILE*		        fil;			
+	SREC_FILE*		    fil;			
 	srec_result_t       record;
     int (*meta_fn)(struct _srec_reader_t_*);    /* meta-record callback */
     int (*store_fn)(struct _srec_reader_t_*);   /* store payload callbacl */
@@ -48,7 +59,7 @@ typedef void (*srec_entry_pt_t)(void);
 
 extern void srec_reader_init (  
                                 srec_reader_t*      reader, 
-                                FILE*               fil, 
+                                SREC_FILE*          fil, 
                                 srec_callback_fn_t  meta_fn, 
                                 srec_callback_fn_t  store_fn, 
                                 srec_callback_fn_t  term_fn,

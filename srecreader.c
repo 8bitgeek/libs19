@@ -20,12 +20,20 @@
  * DEALINGS IN THE SOFTWARE.
  ****************************************************************************/
 #include <srecreader.h>
-#include <string.h>
 
-static int srec_readline( FILE* fil, char *input, int len );
+#if defined(__CARIBOU_RTOS__)
+    #include <board.h>
+    #include <caribou/lib/string.h>
+#else 
+    #include <string.h>
+#endif
+
+
+
+static int srec_readline( SREC_FILE* fil, char *input, int len );
 
 extern void srec_reader_init (  srec_reader_t*      reader, 
-                                FILE*               fil, 
+                                SREC_FILE*               fil, 
                                 srec_callback_fn_t  meta_fn, 
                                 srec_callback_fn_t  store_fn, 
                                 srec_callback_fn_t  term_fn,
@@ -76,9 +84,9 @@ extern void srec_reader_read( srec_reader_t* reader )
     }
 }
 
-static int srec_readline( FILE* fil, char *input, int len )
+static int srec_readline( SREC_FILE* fil, char *input, int len )
 {
-    if ( fgets( input, len, fil ) != NULL )
+    if ( srec_fgets( input, len, fil ) != NULL )
     {
         return strlen(input);
     }

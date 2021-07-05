@@ -22,7 +22,14 @@
 #ifndef _SRECREADER_H_
 #define _SRECREADER_H_
 
-#if defined(__CARIBOU_RTOS__)
+#if defined(__BARE_METAL__)
+    #include <board.h>
+    #include <ff.h>
+    #include <stdint.h>
+    #include <stdio.h>
+    #define SREC_FILE FIL
+    #define srec_fgets f_gets
+#elif defined(__CARIBOU_RTOS__)
     #include <board.h>
     #include <caribou/lib/stdint.h>
     #include <caribou/lib/stdio.h>

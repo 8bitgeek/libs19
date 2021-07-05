@@ -21,7 +21,10 @@
  ****************************************************************************/
 #include <srecreader.h>
 
-#if defined(__CARIBOU_RTOS__)
+#if defined(__BARE_METAL__)
+    #include <board.h>
+    #include <string.h>
+#elif defined(__CARIBOU_RTOS__)
     #include <board.h>
     #include <caribou/lib/string.h>
 #else 

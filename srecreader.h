@@ -29,8 +29,9 @@
     #include <stdio.h>
     #define SREC_FILE FIL
     #define srec_fgets f_gets
-#elif defined(__CARIBOU_RTOS__)
+#elif defined(_CARIBOU_RTOS_)
     #include <board.h>
+    #include <ff.h>
     #include <caribou/lib/stdint.h>
     #include <caribou/lib/stdio.h>
     #define SREC_FILE FIL

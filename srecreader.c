@@ -24,7 +24,7 @@
 #if defined(__BARE_METAL__)
     #include <board.h>
     #include <string.h>
-#elif defined(__CARIBOU_RTOS__)
+#elif defined(_CARIBOU_RTOS_)
     #include <board.h>
     #include <caribou/lib/string.h>
 #else 

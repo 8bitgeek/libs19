@@ -21,7 +21,6 @@
  ****************************************************************************/
 #include <srec.h>
 #include <string.h>
-#include <caribou/lib/stdio.h>
 
 static uint8_t  nibble         (uint8_t c);
 static uint8_t 	ascii_hex_translate(uint8_t length, char* input, srec_result_t* output);

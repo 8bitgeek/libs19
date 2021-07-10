@@ -21,6 +21,7 @@
  ****************************************************************************/
 #include <srec.h>
 #include <string.h>
+#include <caribou/lib/stdio.h>
 
 static uint8_t  nibble         (uint8_t c);
 static uint8_t 	ascii_hex_translate(uint8_t length, char* input, srec_result_t* output);
@@ -70,7 +71,8 @@ srecord_t srec_parse(char* input, srec_result_t* output)
 						break;
 					case '3':
 						output->address = ascii_hex_32(input);
-						output->length=ascii_hex_translate(length-7,&input[8],output);
+						fprintf( stderr, "%d %s", length, &input[8]);
+						ascii_hex_translate(length-5,&input[8],output);
 						output->record = S3;
 						break;
 					case '4':

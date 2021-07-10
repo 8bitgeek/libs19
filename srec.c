@@ -71,7 +71,6 @@ srecord_t srec_parse(char* input, srec_result_t* output)
 						break;
 					case '3':
 						output->address = ascii_hex_32(input);
-						fprintf( stderr, "%d %s", length, &input[8]);
 						ascii_hex_translate(length-5,&input[8],output);
 						output->record = S3;
 						break;

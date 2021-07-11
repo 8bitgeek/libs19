@@ -23,7 +23,9 @@
 
 #if defined(__BARE_METAL__)
     #include <board.h>
-    #include <string.h>
+    #include <stddef.h>
+    static void*  memset(void *s, int c, size_t n);
+    static size_t strlen(const char * str);
 #elif defined(_CARIBOU_RTOS_)
     #include <board.h>
     #include <caribou/lib/string.h>
@@ -36,7 +38,7 @@
 static int srec_readline( SREC_FILE* fil, char *input, int len );
 
 extern void srec_reader_init (  srec_reader_t*      reader, 
-                                SREC_FILE*               fil, 
+                                SREC_FILE*          fil, 
                                 srec_callback_fn_t  meta_fn, 
                                 srec_callback_fn_t  store_fn, 
                                 srec_callback_fn_t  term_fn,
@@ -95,3 +97,24 @@ static int srec_readline( SREC_FILE* fil, char *input, int len )
     }
     return -1;
 }
+
+#if defined(__BARE_METAL__)
+
+    static void *memset(void *s, int c, size_t n)
+    {
+        unsigned char* p=s;
+        while(n--) *p++ = c;
+        return s;
+    }
+
+    static size_t strlen(const char * str)
+    {
+        register size_t n=0;
+        if ( str )
+        {
+            for( register char* p=(char*)str; *p++; n++ );
+        }
+        return n;
+    }
+
+#endif

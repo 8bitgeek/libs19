@@ -20,7 +20,17 @@
  * DEALINGS IN THE SOFTWARE.
  ****************************************************************************/
 #include <srec.h>
-#include <string.h>
+#if defined(__BARE_METAL__)
+    #include <board.h>
+    #include <stddef.h>
+    static void*  memset(void *s, int c, size_t n);
+    static size_t strlen(const char * str);
+#elif defined(_CARIBOU_RTOS_)
+    #include <board.h>
+    #include <caribou/lib/string.h>
+#else 
+    #include <string.h>
+#endif
 
 static uint8_t  nibble         (uint8_t c);
 static uint8_t 	ascii_hex_translate(uint8_t length, char* input, srec_result_t* output);
@@ -199,3 +209,23 @@ static uint8_t fetch_checksum(uint8_t length, char* input)
 	return rc;
 }
 
+#if defined(__BARE_METAL__)
+
+    static void *memset(void *s, int c, size_t n)
+    {
+        unsigned char* p=s;
+        while(n--) *p++ = c;
+        return s;
+    }
+
+    static size_t strlen(const char * str)
+    {
+        register size_t n=0;
+        if ( str )
+        {
+            for( register char* p=(char*)str; *p++; n++ );
+        }
+        return n;
+    }
+
+#endif

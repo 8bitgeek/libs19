@@ -50,7 +50,7 @@ static uint32_t ascii_hex_32   (char* input);
 srecord_t srec_parse(char* input, srec_result_t* output)
 {
 	memset(output,0,sizeof(srec_result_t));
-	output->record = Invalid;
+	output->record = InvalidType;
 	if ( input )
 	{
 		if ( strlen(input) >= 10 && *input++ == 'S' ) // could be an S record?
@@ -84,7 +84,7 @@ srecord_t srec_parse(char* input, srec_result_t* output)
 						output->record = S3;
 						break;
 					case '4':
-						output->record = Invalid;
+						output->record = InvalidType;
 						break;
 					case '5':
 						output->record = S5;
@@ -105,6 +105,10 @@ srecord_t srec_parse(char* input, srec_result_t* output)
 						output->record = S9;
 						break;
 				}
+			}
+			else
+			{
+				output->record = InvalidCRC;
 			}
 		}
 	}

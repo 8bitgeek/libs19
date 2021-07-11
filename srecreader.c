@@ -42,6 +42,7 @@ extern void srec_reader_init (  srec_reader_t*      reader,
                                 srec_callback_fn_t  meta_fn, 
                                 srec_callback_fn_t  store_fn, 
                                 srec_callback_fn_t  term_fn,
+                                srec_callback_fn_t  fault_fn,
                                 char*               line_buffer, 
                                 int                 max_line_len,
                                 void*               arg )
@@ -51,6 +52,7 @@ extern void srec_reader_init (  srec_reader_t*      reader,
     reader->meta_fn      = meta_fn;
     reader->store_fn     = store_fn;
     reader->term_fn      = term_fn;
+    reader->fault_fn     = fault_fn;
     reader->line_buffer  = line_buffer;
     reader->max_line_len = max_line_len;
     reader->arg          = arg;
@@ -83,7 +85,10 @@ extern void srec_reader_read( srec_reader_t* reader )
                 if ( reader->term_fn != NULL )
                     reader->term_fn( reader );
                 break;
-            case Invalid: 
+            case InvalidType:
+            case InvalidCRC: 
+                if ( reader->fault_fn != NULL )
+                    reader->fault_fn( reader );
                 break;  
         }
     }

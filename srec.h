@@ -41,15 +41,16 @@ typedef enum
 	S7,
 	S8,
 	S9,
-	Invalid,
+	InvalidType,
+	InvalidCRC,
 } srecord_t;
 
 typedef struct
 {
-	srecord_t			record;		/* S record (S0-S9) */
-	uint16_t			length;		/* length of data in binary bytes */
-	uint32_t			address;	/* address position (In native byte order) */
-	uint8_t				data[256];	/* record data in binary bytes */
+	srecord_t			record;		/**< S record (S0-S9), or InvalidXX */
+	uint16_t			length;		/**< length of data in binary bytes */
+	uint32_t			address;	/**< address position (In native byte order) */
+	uint8_t				data[256];	/**< record data in binary bytes */
 } srec_result_t;
 
 extern srecord_t srec_parse( char* input, srec_result_t* output );

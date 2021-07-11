@@ -54,12 +54,13 @@ typedef struct _srec_reader_t_
 {
 	SREC_FILE*		    fil;			
 	srec_result_t       record;
-    int (*meta_fn)(struct _srec_reader_t_*);    /* meta-record callback */
-    int (*store_fn)(struct _srec_reader_t_*);   /* store payload callbacl */
-    int (*term_fn)(struct _srec_reader_t_*);    /* termination / entry-point callabck */
+    int (*meta_fn)(struct _srec_reader_t_*);    /**< meta-record callback */
+    int (*store_fn)(struct _srec_reader_t_*);   /**< store payload callbacl */
+    int (*term_fn)(struct _srec_reader_t_*);    /**< termination / entry-point callabck */
+    int (*fault_fn)(struct _srec_reader_t_*);   /**< fault callabck */
     char*               line_buffer;
     int                 max_line_len;
-    void*               arg;                    /* consumer argument */
+    void*               arg;                    /**< consumer argument */
 } srec_reader_t;
 
 typedef int  (*srec_callback_fn_t)(srec_reader_t*);
@@ -71,6 +72,7 @@ extern void srec_reader_init (
                                 srec_callback_fn_t  meta_fn, 
                                 srec_callback_fn_t  store_fn, 
                                 srec_callback_fn_t  term_fn,
+                                srec_callback_fn_t  fault_fn,
                                 char*               line_buffer, 
                                 int                 max_line_len,
                                 void*               arg

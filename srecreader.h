@@ -77,7 +77,17 @@ extern void srec_reader_init (
                                 int                 max_line_len,
                                 void*               arg
                              );
+
+/**
+ * @brief Read the entire stream.
+ */
 extern void srec_reader_read ( srec_reader_t* reader );
+
+/**
+ * @brief Read a single record.
+ * @return > 0 indicates a record was handled, else eof.
+ */
+extern int srec_reader_read_once ( srec_reader_t* reader );
 
 #ifdef __cplusplus
 }

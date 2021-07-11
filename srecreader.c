@@ -58,9 +58,10 @@ extern void srec_reader_init (  srec_reader_t*      reader,
     reader->arg          = arg;
 }
 
-extern void srec_reader_read( srec_reader_t* reader )
+extern int srec_reader_read_once ( srec_reader_t* reader )
 {
-    while ( srec_readline( reader->fil, reader->line_buffer, reader->max_line_len ) > 0 )
+    int rc;
+    if ( (rc=srec_readline( reader->fil, reader->line_buffer, reader->max_line_len )) > 0 )
     {
         switch( srec_parse( reader->line_buffer, &reader->record ) )
         {
@@ -92,6 +93,12 @@ extern void srec_reader_read( srec_reader_t* reader )
                 break;  
         }
     }
+    return rc;
+}
+
+extern void srec_reader_read( srec_reader_t* reader )
+{
+    while ( srec_reader_read_once ( reader ) > 0 );
 }
 
 static int srec_readline( SREC_FILE* fil, char *input, int len )
